@@ -15,5 +15,14 @@
   "bugs": {
     "url": "https://github.com/fgfg163/http-push-file-cli/issues"
   },
-  "homepage": "https://github.com/fgfg163/http-push-file-cli#readme"
+  "homepage": "https://github.com/fgfg163/http-push-file-cli#readme",
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-stage-3": "^6.24.1",
+    "babel-register": "^6.26.0"
+  },
+  "dependencies": {
+    "babel-polyfill": "^6.26.0"
+  }
 }

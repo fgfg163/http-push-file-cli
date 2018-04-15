@@ -1,0 +1,19 @@
+{
+  "name": "http-push-file-cli",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fgfg163/http-push-file-cli.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fgfg163/http-push-file-cli/issues"
+  },
+  "homepage": "https://github.com/fgfg163/http-push-file-cli#readme"
+}

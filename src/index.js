@@ -25,7 +25,7 @@ const pushToServer = (filePath) => {
       to: 'Fred',
       lastName: 'Flintstone'
     }
-  }).then(function (response) {
+  }).then(function (response0s) {
     response.data.pipe(fs.createWriteStream('ada_lovelace.jpg'))
   });
 }

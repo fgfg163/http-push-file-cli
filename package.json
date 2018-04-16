@@ -23,6 +23,9 @@
     "babel-register": "^6.26.0"
   },
   "dependencies": {
-    "babel-polyfill": "^6.26.0"
+    "axios": "^0.18.0",
+    "babel-polyfill": "^6.26.0",
+    "chokidar": "^2.0.3",
+    "formdata": "^0.10.4"
   }
 }

@@ -1,34 +1,39 @@
 import path from 'path'
-import fs from './fs-promise'
+import fs from 'fs'
+import chokidar from 'chokidar'
+import axios from 'axios'
+import FormData from 'formdata'
+
 const watchOptions = {
-  ignore: ['node_modules/']
-}
-
-const getDirAndFileList = async (thePath) => {
-  const fileList = []
-  const dirList = []
-  const runPath = async (filePath) => {
-    const list = await fs.readdir(filePath)
-    const resList = await Promise.all(list.map(async (fileName) => {
-      const subFilePath = path.join(filePath, fileName)
-      const info = await fs.stat(subFilePath)
-      if (info.isDirectory()) {
-        dirList.push(subFilePath)
-        await runPath(subFilePath);
-      } else {
-        fileList.push(subFilePath)
-      }
-    }))
-  }
-  await runPath(thePath)
-  return [fileList, dirList]
+  ignore: ['.git', '.idea', 'node_modules']
 }
 
 
-(async () => {
-  const [fileList, dirList] = await getDirAndFileList('./')
-  console.log(fileList)
-  console.log(dirList)
-})().catch((err) => {
-  console.error(err)
+const watcher = chokidar.watch('./', {
+  ignored: watchOptions.ignore
 })
+
+const pushToServer = (filePath) => {
+  const formdata = new FormData()
+  formdata.append('file')
+  formdata.append('to', path.join('/home/map/', filePath))
+
+  axios({
+    method: 'post',
+    url: 'http://gzhxy-waimai-dcloud48.gzhxy.iwm.name:8275/receiver.php',
+    data: {
+      to: 'Fred',
+      lastName: 'Flintstone'
+    }
+  }).then(function (response) {
+    response.data.pipe(fs.createWriteStream('ada_lovelace.jpg'))
+  });
+}
+
+watcher.on('add', (path) => {
+  pushToServer
+}).on('change', (path) => {
+
+}).on('unlink', (path) => {
+})
+

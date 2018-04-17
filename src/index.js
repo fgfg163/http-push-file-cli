@@ -1,39 +1,45 @@
 import path from 'path'
 import fs from 'fs'
 import chokidar from 'chokidar'
-import axios from 'axios'
+import superagent from 'superagent'
 import FormData from 'formdata'
+import fsp from './fs-promise'
 
 const watchOptions = {
   ignore: ['.git', '.idea', 'node_modules']
 }
 
+const ignoreRegExp = watchOptions.ignore.map(e => new RegExp(e))
 
-const watcher = chokidar.watch('./', {
-  ignored: watchOptions.ignore
+const watcher = chokidar.watch(fs.realpathSync('./'), {
+  ignored: (filePath, stat) => (
+    ignoreRegExp.some(p => p.test(filePath))
+  )
 })
 
-const pushToServer = (filePath) => {
-  const formdata = new FormData()
-  formdata.append('file')
-  formdata.append('to', path.join('/home/map/', filePath))
+const pushToServer = async (filePath) => {
+  try {
+    await fsp.access(filePath)
+  } catch (err) {
+    return
+  }
 
-  axios({
-    method: 'post',
-    url: 'http://gzhxy-waimai-dcloud48.gzhxy.iwm.name:8275/receiver.php',
-    data: {
-      to: 'Fred',
-      lastName: 'Flintstone'
-    }
-  }).then(function (response0s) {
-    response.data.pipe(fs.createWriteStream('ada_lovelace.jpg'))
-  });
+  return superagent.post('http://gzhxy-waimai-dcloud48.gzhxy.iwm.name:8275/receiver.php')
+    .field('to', path.posix.join('/home/map/', filePath))
+    .attach('file', filePath)
+    .then((res) => {
+      console.log(res.text)
+      console.log(filePath)
+    })
 }
 
 watcher.on('add', (path) => {
-  pushToServer
+  pushToServer(path)
 }).on('change', (path) => {
-
+  pushToServer(path)
 }).on('unlink', (path) => {
+}).on('all', (event, path) => {
+  console.log(event, path);
 })
 
+console.log('start')

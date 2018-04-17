@@ -35,4 +35,15 @@ export default {
       fs.stat(...param)
     })
   ),
+  access: (...param) => (
+    new Promise((resolve) => {
+      param[2] = (err, res) => {
+        if (err) {
+          throw err
+        }
+        resolve(res)
+      }
+      fs.access(...param)
+    })
+  ),
 }
